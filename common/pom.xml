@@ -4,22 +4,17 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>CHUN</groupId>
-    <artifactId>tiny-dubbo</artifactId>
-    <version>1.0-SNAPSHOT</version>
-    <packaging>pom</packaging>
+    <parent>
+        <groupId>CHUN</groupId>
+        <artifactId>tiny-dubbo</artifactId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>common</artifactId>
 
     <properties>
         <maven.compiler.source>16</maven.compiler.source>
         <maven.compiler.target>16</maven.compiler.target>
     </properties>
-
-    <modules>
-        <module>common</module>
-        <module>registry</module>
-        <module>cluster</module>
-        <module>rpc</module>
-        <module>demo</module>
-    </modules>
 
 </project>

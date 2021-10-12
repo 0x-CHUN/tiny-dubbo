@@ -1,0 +1,2 @@
+zookeeper=dubbo.registry.zk.ZookeeperRegistrar
+redis=dubbo.registry.redis.RedisRegistrar

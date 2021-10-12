@@ -1,0 +1,2 @@
+random=dubbo.cluster.loadbalancer.RandomLoadbalancer
+round=dubbo.cluster.loadbalancer.RoundLoadBalancer
