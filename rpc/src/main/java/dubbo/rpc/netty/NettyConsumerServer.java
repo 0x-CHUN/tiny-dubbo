@@ -12,6 +12,9 @@ import dubbo.rpc.ConsumerProxy;
 import dubbo.rpc.ConsumerServer;
 import dubbo.rpc.Request;
 
+/**
+ * Netty实现的消费者服务器
+ */
 @Slf4j
 public class NettyConsumerServer implements ConsumerServer {
     @Override

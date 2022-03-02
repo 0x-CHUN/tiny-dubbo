@@ -10,10 +10,10 @@ import java.util.Arrays;
 @Getter
 @Setter
 public class Request implements Serializable {
-    private String className;
-    private String methodName;
-    private Class[] types;
-    private Object[] params;
+    private String className; // 调用的类名
+    private String methodName; // 调用的方法名
+    private Class[] types; // 参数类型
+    private Object[] params; // 参数
 
     @Override
     public String toString() {

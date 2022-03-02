@@ -11,11 +11,14 @@ import lombok.extern.slf4j.Slf4j;
 import dubbo.rpc.ProviderServer;
 import dubbo.rpc.annotation.Container;
 
+/**
+ * Netty实现的提供者服务器
+ */
 @Slf4j
 public class NettyProviderServer implements ProviderServer {
     @Override
     public void start(String address) {
-        Container.registerSelf(address);
+        Container.registerSelf(address); // 注册所有服务（即自己能提供那些服务）
         String[] addrs = address.split(":");
         String ip = addrs[0];
         Integer port = Integer.parseInt(addrs[1]);
@@ -23,6 +26,9 @@ public class NettyProviderServer implements ProviderServer {
         publish(ip, port);
     }
 
+    /**
+     * 监听在ip:port处，等待RPC调用
+     */
     private void publish(String ip, Integer port) {
         try {
             EventLoopGroup bossGroup = new NioEventLoopGroup();
@@ -41,7 +47,7 @@ public class NettyProviderServer implements ProviderServer {
                                             ClassResolvers.cacheDisabled(
                                                     NettyProviderServer.class.getClassLoader()
                                             )))
-                                    .addLast(new NettyProviderHandler());
+                                    .addLast(new NettyProviderHandler()); // 进行RPC调用处理的
                         }
                     }).option(ChannelOption.SO_BACKLOG, 128)
                     .childOption(ChannelOption.SO_KEEPALIVE, true);

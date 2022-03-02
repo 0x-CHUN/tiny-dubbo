@@ -4,20 +4,24 @@ import dubbo.registry.Registrar;
 import dubbo.registry.RegistrarFactory;
 import lombok.extern.slf4j.Slf4j;
 import org.reflections.Reflections;
-import org.reflections.scanners.TypeAnnotationsScanner;
 import org.reflections.util.ClasspathHelper;
 import org.reflections.util.ConfigurationBuilder;
 
-import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
+/**
+ * 一个简单的容器，里面包含一个注册中心
+ */
 @Slf4j
 public class Container {
-    private static Registrar registrar = RegistrarFactory.getRegistrar();
-    private static Map<String, Object> providers = new HashMap<>();
+    private static Registrar registrar = RegistrarFactory.getRegistrar(); // 注册中心
+    private static Map<String, Object> providers = new HashMap<>(); // 服务名字和对应的provider类
 
+    /**
+     * 在初始化阶段，将所有的Provider放入容器
+     */
     static {
         Reflections reflections = new Reflections(new ConfigurationBuilder()
                 .setUrls(ClasspathHelper.forPackage("")));
@@ -36,7 +40,11 @@ public class Container {
         }
     }
 
-
+    /**
+     * 将所有的服务注册到注册中心
+     *
+     * @param address 自己的服务地址
+     */
     public static void registerSelf(String address) {
         for (String service : providers.keySet()) {
             registrar.register(address, service);
