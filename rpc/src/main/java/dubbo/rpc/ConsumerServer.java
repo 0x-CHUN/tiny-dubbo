@@ -7,5 +7,12 @@ import dubbo.annotation.SPI;
  */
 @SPI("netty")
 public interface ConsumerServer {
+    /**
+     * 从address执行特定Request
+     *
+     * @param address 服务提供者地址
+     * @param request 执行的需求
+     * @return 响应
+     */
     Object execute(String address, Request request);
 }

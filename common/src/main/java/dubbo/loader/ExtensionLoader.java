@@ -17,7 +17,9 @@ import java.util.regex.Pattern;
 public class ExtensionLoader<T> {
     private static final String FARPC_DIRECTORY = "META-INF/dubbo/";
     private static final Pattern NAME_SEPARATOR = Pattern.compile("\\s*[,]+\\s*");
+    // 接口类和对应的ExtensionLoader缓存
     private static final ConcurrentMap<Class<?>, ExtensionLoader<?>> EXTENSION_LOADERS = new ConcurrentHashMap<>();
+    // 接口类和对应的实现类缓存
     private static final ConcurrentMap<Class<?>, Object> EXTENSION_INSTANCES = new ConcurrentHashMap<>();
 
     private final Class<?> type;
@@ -34,6 +36,9 @@ public class ExtensionLoader<T> {
         this.type = type;
     }
 
+    /**
+     * 初始化一个接口类的ExtensionLoader
+     */
     @SuppressWarnings("unchecked")
     public static <T> ExtensionLoader<T> getExtensionLoader(Class<T> type) {
         if (type == null)
@@ -58,7 +63,7 @@ public class ExtensionLoader<T> {
      * Return the extension by name
      *
      * @param name the extension name
-     * @return
+     * @return the extension instance
      */
     @SuppressWarnings("unchecked")
     public T getExtension(String name) {
@@ -68,9 +73,10 @@ public class ExtensionLoader<T> {
         if ("true".equals(name)) {
             return getDefaultExtension();
         }
+        // 从缓存的实例中获取
         Holder<Object> holder = cachedInstances.get(name);
         if (holder == null) {
-            cachedInstances.putIfAbsent(name, new Holder<Object>());
+            cachedInstances.putIfAbsent(name, new Holder<>());
             holder = cachedInstances.get(name);
         }
         Object instance = holder.get();
@@ -86,7 +92,14 @@ public class ExtensionLoader<T> {
         return (T) instance;
     }
 
+    /**
+     * 创建extension实例
+     *
+     * @param name 创建extension实例的类名
+     * @return extension实例
+     */
     private T createExtension(String name) {
+        // 从配置文件中加载所有的拓展类，可得到“配置项名称”到“配置类”的映射关系表
         Class<?> clazz = getExtensionClasses().get(name);
         if (clazz == null) {
             throw findException(name);
@@ -94,7 +107,8 @@ public class ExtensionLoader<T> {
         try {
             T instance = (T) EXTENSION_INSTANCES.get(clazz);
             if (instance == null) {
-                EXTENSION_INSTANCES.putIfAbsent(clazz, (T) clazz.newInstance());
+                // 通过反射创建实例
+                EXTENSION_INSTANCES.putIfAbsent(clazz, clazz.newInstance());
                 instance = (T) EXTENSION_INSTANCES.get(clazz);
             }
             return instance;
@@ -133,7 +147,7 @@ public class ExtensionLoader<T> {
                 }
             }
         }
-        Map<String, Class<?>> extensionClasses = new HashMap<String, Class<?>>();
+        Map<String, Class<?>> extensionClasses = new HashMap<>();
         loadFile(extensionClasses, FARPC_DIRECTORY);
         return extensionClasses;
     }

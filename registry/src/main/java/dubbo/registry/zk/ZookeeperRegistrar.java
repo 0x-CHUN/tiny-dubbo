@@ -22,6 +22,11 @@ public class ZookeeperRegistrar extends AbstractRegistrar {
 
     private CuratorFramework curatorFramework;
 
+    /**
+     * 从注册中心的地址初始化一个Zookeeper的注册中心
+     *
+     * @param registerAddress the config initial address
+     */
     @Override
     public void init(String registerAddress) {
         curatorFramework = CuratorFrameworkFactory.builder()
@@ -34,6 +39,7 @@ public class ZookeeperRegistrar extends AbstractRegistrar {
 
     @Override
     protected List<String> lookup(String service) {
+        // 查找的路径
         String path = FOLDER + SEPARATOR + service;
         try {
             List<String> provider = curatorFramework.getChildren().forPath(path);
@@ -65,6 +71,11 @@ public class ZookeeperRegistrar extends AbstractRegistrar {
 
     }
 
+    /**
+     * 观察zookeeper的路径，当有变化时可以执行相应的变化
+     *
+     * @param path 观察zookeeper的路径
+     */
     private void watchProvider(String path) {
         try (CuratorCache cache = CuratorCache.build(curatorFramework, path)) {
             CuratorCacheListener listener = CuratorCacheListener.builder()

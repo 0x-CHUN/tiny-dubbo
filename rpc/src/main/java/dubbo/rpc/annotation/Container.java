@@ -16,12 +16,9 @@ import java.util.Set;
  */
 @Slf4j
 public class Container {
-    private static Registrar registrar = RegistrarFactory.getRegistrar(); // 注册中心
-    private static Map<String, Object> providers = new HashMap<>(); // 服务名字和对应的provider类
+    private static final Registrar registrar = RegistrarFactory.getRegistrar(); // 注册中心
+    private static final Map<String, Object> providers = new HashMap<>(); // 服务名字和对应的provider类
 
-    /**
-     * 在初始化阶段，将所有的Provider放入容器
-     */
     static {
         Reflections reflections = new Reflections(new ConfigurationBuilder()
                 .setUrls(ClasspathHelper.forPackage("")));
@@ -41,7 +38,7 @@ public class Container {
     }
 
     /**
-     * 将所有的服务注册到注册中心
+     * 将服务注册到注册中心
      *
      * @param address 自己的服务地址
      */

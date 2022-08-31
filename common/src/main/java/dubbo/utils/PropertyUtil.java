@@ -4,10 +4,16 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
+/**
+ * 读取properties的工具类，单例
+ */
 public class PropertyUtil {
     private volatile static PropertyUtil instance = null;
     private Properties property;
 
+    /**
+     * 单例实现
+     */
     public static PropertyUtil getInstance() {
         if (instance == null) {
             synchronized (PropertyUtil.class) {
@@ -26,6 +32,7 @@ public class PropertyUtil {
     private void init() {
         InputStream in = null;
         try {
+            // 获取启动类所在位置的resource文件夹读取application.properties
             in = getClass().getClassLoader().getResourceAsStream("application.properties");
             property = new Properties();
             property.load(in);
@@ -35,8 +42,7 @@ public class PropertyUtil {
             if (in != null) {
                 try {
                     in.close();
-                } catch (IOException e) {
-                    throw new RuntimeException("close application.properties error : ", e);
+                } catch (IOException ignored) {
                 }
             }
         }

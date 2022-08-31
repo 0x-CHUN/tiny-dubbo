@@ -18,7 +18,7 @@ import dubbo.rpc.annotation.Container;
 public class NettyProviderServer implements ProviderServer {
     @Override
     public void start(String address) {
-        Container.registerSelf(address); // 注册所有服务（即自己能提供那些服务）
+        Container.registerSelf(address); // 注册服务（即自己能提供哪些服务）
         String[] addrs = address.split(":");
         String ip = addrs[0];
         Integer port = Integer.parseInt(addrs[1]);

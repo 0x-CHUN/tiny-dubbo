@@ -6,7 +6,9 @@ import dubbo.config.Property;
 
 import java.util.List;
 
-
+/**
+ * 抽象注册中心类，复用代码
+ */
 public abstract class AbstractRegistrar implements Registrar {
     protected static final String FOLDER = "/dubboregistry";
     protected static final String SEPARATOR = "/";
@@ -16,6 +18,12 @@ public abstract class AbstractRegistrar implements Registrar {
         init(address);
     }
 
+    /**
+     * discover the service
+     *
+     * @param service the wanted service name
+     * @return service instance
+     */
     public String discover(String service) {
         List<String> providers = lookup(service);
         Loadbalancer loadbalancer = LoadbalancerFactory.getLoadbalancer();
@@ -23,7 +31,7 @@ public abstract class AbstractRegistrar implements Registrar {
     }
 
     /**
-     * Initial the dubbo.config
+     * Init the Register by address
      *
      * @param address the config initial address
      */

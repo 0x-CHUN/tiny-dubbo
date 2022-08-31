@@ -7,13 +7,18 @@ import redis.clients.jedis.JedisPoolConfig;
 
 @Slf4j
 public class RedisUtils {
-    private static int MAX_ACTIVE = 1024;
-    private static int MAX_IDLE = 200;
-    private static int MAX_WAIT = 10000;
-    private static int TIMEOUT = 10000;
-    private static boolean TEST_ON_BORROW = true;
-    private static JedisPool jedisPool = null;
+    private static final int MAX_ACTIVE = 1024;
+    private static final int MAX_IDLE = 200;
+    private static final int MAX_WAIT = 10000;
+    private static final int TIMEOUT = 10000;
+    private static final boolean TEST_ON_BORROW = true;
+    private static volatile JedisPool jedisPool = null;
 
+    /**
+     * 从连接地址初始化一个RedisUtils
+     *
+     * @param address 连接地址
+     */
     public static void init(String address) {
         if (jedisPool == null) {
             synchronized (RedisUtils.class) {
@@ -21,7 +26,7 @@ public class RedisUtils {
                     try {
                         String[] addr = address.split(":");
                         String host = addr[0];
-                        Integer ip = Integer.parseInt(addr[1]);
+                        int ip = Integer.parseInt(addr[1]);
                         JedisPoolConfig config = new JedisPoolConfig();
                         config.setMaxTotal(MAX_ACTIVE);
                         config.setMaxIdle(MAX_IDLE);
